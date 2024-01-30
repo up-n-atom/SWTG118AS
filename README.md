@@ -42,7 +42,9 @@
 | Data-bits | 8         | 8           |
 | Stop-bits | 1         | 1           |
 
-## Web Managed Boot Log
+## Web Managed
+
+### Boot Log
 
 ```bash
 ==========Loader start===========
@@ -107,17 +109,17 @@ sal_port_config_restore()...OK
 
 ```
 
-## Web Managed Password
+### Password
 
 The *"uboot"* password is `Switch321`
 
-## Web Managed Commands
+### Commands
 
 * `gpio`
 * `stp`
 
 
-## Web Managed / Unmanaged SPI Flash Viewer
+### SPI Flash Viewer
 
 ```bash
 =========================SPI FLASH VIEWER=============================
@@ -135,7 +137,7 @@ The *"uboot"* password is `Switch321`
 >
 ```
 
-## Protected Regions
+### Protected Regions
 
 ```bash
 There 2 protected region(s).
@@ -143,7 +145,7 @@ There 2 protected region(s).
     Portected region 1: 0x004000-0x01c000
 ```
 
-## Web Managed Firmware Mapping
+### Firmware Mapping
 
 | Firmware Offset | Length     | Description              |
 | --------------- | ---------- | ------------------------ |
@@ -151,13 +153,60 @@ There 2 protected region(s).
 | 0x001FD000      | 0x0000023D | Factory settings         |
 | 0x001FE000      | 0x00000A42 | User settings            |
 
-## Web Managed Firmware to Update Mapping
+### Firmware to Update Mapping
 
 | Firmware Offset | Update Offset | Length     |
 | --------------- | ------------- | ---------- |
 | 0x00001000      | 0x00000014    | 0x00002ffe |
 | 0x0001C000      | 0x00003012    | 0x00001000 |
 | 0x0001D000      | 0x00003ffe    |            |
+
+## Unmanaged
+
+### Boot Log
+
+```bash
+error SDS_MODE 
+LINE 2178
+
+RTL8371B start aas
+RTL8371B:
+```
+
+### Commands
+
+```bash
+RTL8371B:?                                                                        
+    rst:        -reset chip                                                       
+the following is set IOL test mode                                                
+        f:    -fix pattern: please input port: 0-7;                               
+        r:    -random pattern: please input port: 0-7;                            
+        10:   -10M MDI: please input port: 0-7;
+        11:   -10M MDIx: please input port: 0-7;
+        100:    -100M MDI: please input port: 0-7;
+        101:    -100M MDIX: please input port: 0-7;
+        g1:   -giga mode1: please input port: 0-7;
+        g2:   -giga mode2: please input port: 0-7;
+        g3:   -giga mode3: please input port: 0-7;
+        g4:   -giga mode4: please input port: 0-7;
+        1:    -2.5G mode1: please input port: 0-7;
+        2:    -2.5G mode2: please input port: 0-7;
+        3:    -2.5G mode3: please input port(0~7) and lp;
+        4:    -2.5G mode4: please input tone(1~5) and port(0~7);
+        5:    -2.5G mode5: please input port: 0-7;
+        6:    -2.5G mode6: please input port: 0-7;
+the following is set sds test mode,chip sel:8373/8372: 3, 8224: 4;
+        sd:    -please input chip: 3 or 4; prbs31:31; sds: 0~1; on/off:1 or 0;
+        sd:    -please input chip: 3 or 4; prbs9:9; sds: 0~1; on/off:1 or 0; 
+        sd:    -please input chip: 3 or 4; tx_8081: 8; sds: 0~1; onoff:1 or 0;
+        pre:   -please input chip: 3 or 4; sds: 0~1; pre: 0~63, endis:0~1;
+        main:  -please input chip: 3 or 4; sds: 0~1; mamp: 0~63, boost:0~1, endis: 0~1;
+        post:  -please input chip: 3 or 4; sds: 0~1; post: 0~63, endis: 0~1;
+        tx:    -please input chip: 3 or 4; sds: 0~1; z0:0~15;
+        eye:   -please input chip: 3 or 4; sds: 0~1; phyad: 0; frame:0~x;
+
+ dump:   -dump amp cfg;please input chip: 3 or 4; sds:0~1;
+```
 
 # Tools
 
