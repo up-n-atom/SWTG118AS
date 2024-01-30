@@ -7,53 +7,74 @@ import sys
 
 HEADER_LENGTH = 20
 HEADER_MAGIC = 0x12345678
+HEADER_RESERVED = 0x332255FF
 PAYLOAD_LENGTH = 0x2ffe + 0x1000
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description='SWTGW tool')
+    print_or_exit = print if args.update else sys.exit
+
+    parser = argparse.ArgumentParser(description='SWTG update firmware tool')
     parser.add_argument('-u', '--update', help='Re-calculate sums', action='store_true')
-    parser.add_argument('infile', type=argparse.FileType('r+b'))
+    parser.add_argument('firmware', type=argparse.FileType('r+b'))
 
     args = parser.parse_args()
 
-    print_or_exit = print if args.update else sys.exit
-
-    with args.infile as in_file:
-        with mmap.mmap(in_file.fileno(), 0) as in_map:
-            header = bytearray(in_map.read(HEADER_LENGTH))
+    with args.firmware as f:
+        with mmap.mmap(f.fileno(), 0) as mm:
+            header = bytearray(mm.read(HEADER_LENGTH))
+            
             magic, length, header_sum, payload_sum, reserved = struct.unpack('>5I', header)
+            
             print(f"magic: {magic:08x}\n" \
                   f"length: {length:08x}\n" \
                   f"header sum: {header_sum:08x}\n" \
                   f"payload sum: {payload_sum:08x}\n" \
                   f"reserved: {reserved:08x}", header.hex(), sep='\n')
+
             if magic != HEADER_MAGIC:
                 sys.exit('Invalid header magic')
-            if length + HEADER_LENGTH != in_map.size():
+
+            if length + HEADER_LENGTH != mm.size():
                 sys.exit('Invalid header file length')
+
             # Placeholder for the header sum
             header[8:12] = b'\x00' * 4
+
             if header_sum != sum(header):
                 print_or_exit('Invalid header checksum')
-            calc_sum = sum(in_map.read(PAYLOAD_LENGTH))
+
+            # Calculate payload sum...
+            calc_sum = sum(mm.read(PAYLOAD_LENGTH))
+
             # Skip payload header
-            in_map.seek(HEADER_LENGTH, os.SEEK_CUR)
+            mm.seek(HEADER_LENGTH, os.SEEK_CUR)
+
             # Placeholder for payload header sum
             calc_sum += 0xff * HEADER_LENGTH
-            calc_sum += sum(in_map.read())
+
+            # Resume payload sum 
+            calc_sum += sum(mm.read())
+
             if calc_sum != payload_sum:
                 print_or_exit('Invalid payload checksum')
+
             if args.update:
                 # Update the payload sum
                 header[12:16] = struct.pack('>I', calc_sum)
-                # Update the header sum
+
+                # Calculate the header sum
                 calc_sum = sum(header)
+
+                # Update the header sum
                 header[8:12] = struct.pack('>I', calc_sum)
+
                 print(header.hex())
+
                 # Update headers
-                in_map[:HEADER_LENGTH] = header
-                in_map[PAYLOAD_LENGTH+HEADER_LENGTH:PAYLOAD_LENGTH+HEADER_LENGTH*2] = header
+                mm[:HEADER_LENGTH] = header
+                mm[PAYLOAD_LENGTH+HEADER_LENGTH:PAYLOAD_LENGTH+HEADER_LENGTH*2] = header
+
     sys.exit(0)
 
 
