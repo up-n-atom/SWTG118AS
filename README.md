@@ -13,6 +13,16 @@
 # Serial CLI
 
 
+## Baudrate
+
+|           | Unmanaged | Web Managed |
+| --------- | --------- | ----------- |
+| Speed     | 9600      | 57600       |
+| Parity    | None      | None        | 
+| Data-bits | 8         | 8           |
+| Stop-bits | 1         | 1           |
+
+
 ## Boot Log
 
 ```bash
@@ -87,6 +97,32 @@ The *"uboot"* password is `Switch321`
 * `gpio`
 * `stp`
 
+
+## SPI Flash Viewer
+
+```bash
+=========================SPI FLASH VIEWER=============================
+    b: reboot
+    e <addr>: Erase flash with the address of <addr>
+    ev <addr>: Erase flash with the address of <addr> and then Verify
+    r <addr> <len>: read flash from the address of <addr> and then dump
+    c: check runtime kernel without boot
+    cb: check runtime kernel and boot if checksum is pass
+    h: print header
+    l: load runtime kernel
+    v: show verobose information
+    m: print this menu
+    q: quit from spi flash view
+>
+```
+
+## Protected Regions
+
+```bash
+There 2 protected region(s).
+    Portected region 0: 0x000000-0x001000
+    Portected region 1: 0x004000-0x01c000
+```
 
 # Tools
 
