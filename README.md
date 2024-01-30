@@ -131,6 +131,22 @@ There 2 protected region(s).
     Portected region 1: 0x004000-0x01c000
 ```
 
+## Firmware Mapping
+
+| Firmware Offset | Length     | Description              |
+| --------------- | ---------- | ------------------------ |
+| 0x001FC000      | 0x00000006 | MAC address              |
+| 0x001FD000      | 0x0000023D | Factory settings         |
+| 0x001FE000      | 0x00000A42 | User settings            |
+
+## Firmware to Update Mapping
+
+| Firmware Offset | Update Offset | Length     |
+| --------------- | ------------- | ---------- |
+| 0x00001000      | 0x00000014    | 0x00002ffe |
+| 0x0001C000      | 0x00003012    | 0x00001000 |
+| 0x0001D000      | 0x00003ffe    |            |
+
 # Tools
 
 ## Update Firmware Validator and Updater
