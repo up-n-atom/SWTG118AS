@@ -1,6 +1,8 @@
 # SWTG118AS and SWTG115AS RE
 
-# Factory CGI
+# Web UI
+
+## Factory CGI
 
 > Factory CGI can be accessed directly via the admin credentials
 
@@ -10,8 +12,14 @@
 | ftlogo.py  | Factory Logo     | 
 | ftcolor.py | Factory Colours  |
 
-# Serial CLI
+## Passwords
 
+| User        | Password        | Internal MD5 Hash                | CGI          |
+| ---------- | ---------------- | -------------------------------- | ------------ |
+| admin      | admin            | f6fdffe48c908deb0f4c3bd36c032e72 | login.cgi    |
+| hengrui    |                  | 81d57ea79621e8887914f40ee4122185 | login_ft.cgi |
+
+# Serial CLI
 
 ## Baudrate
 
@@ -21,7 +29,6 @@
 | Parity    | None      | None        | 
 | Data-bits | 8         | 8           |
 | Stop-bits | 1         | 1           |
-
 
 ## Boot Log
 
