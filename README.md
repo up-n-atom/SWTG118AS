@@ -8,9 +8,9 @@
 
 | CGI        | Description      |
 | ---------- | ---------------- |
-| ftdft.py   | Factory Defaults |
-| ftlogo.py  | Factory Logo     | 
-| ftcolor.py | Factory Colours  |
+| ftdft.cgi   | Factory Defaults |
+| ftlogo.cgi  | Factory Logo     | 
+| ftcolor.cgi | Factory Colours  |
 
 ## Passwords
 
