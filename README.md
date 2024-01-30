@@ -29,6 +29,6 @@ The *"uboot"* password is `Switch321`
 
 # Tools
 
-## Update Firmare Validator and Updater
+## Update Firmware Validator and Updater
 
 [switchup.py](/tools/switchup.py)
