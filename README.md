@@ -12,8 +12,10 @@
 
 # Serial CLI
 
-```############Login Menu ############
-### Please input uboot password below: ###```
+```bash
+############Login Menu ############
+### Please input uboot password below: ###
+```
 
 ## Password
 
@@ -21,8 +23,8 @@ The *"uboot"* password is `Switch321`
 
 ## Commands
 
-* gpio
-* stp
+* `gpio`
+* `stp`
 
 
 # Tools
