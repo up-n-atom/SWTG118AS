@@ -42,7 +42,7 @@
 | Data-bits | 8         | 8           |
 | Stop-bits | 1         | 1           |
 
-## Boot Log
+## Web Managed Boot Log
 
 ```bash
 ==========Loader start===========
@@ -107,17 +107,17 @@ sal_port_config_restore()...OK
 
 ```
 
-## Password
+## Web Managed Password
 
 The *"uboot"* password is `Switch321`
 
-## Commands
+## Web Managed Commands
 
 * `gpio`
 * `stp`
 
 
-## SPI Flash Viewer
+## Web Managed / Unmanaged SPI Flash Viewer
 
 ```bash
 =========================SPI FLASH VIEWER=============================
@@ -143,7 +143,7 @@ There 2 protected region(s).
     Portected region 1: 0x004000-0x01c000
 ```
 
-## Firmware Mapping
+## Web Managed Firmware Mapping
 
 | Firmware Offset | Length     | Description              |
 | --------------- | ---------- | ------------------------ |
@@ -151,7 +151,7 @@ There 2 protected region(s).
 | 0x001FD000      | 0x0000023D | Factory settings         |
 | 0x001FE000      | 0x00000A42 | User settings            |
 
-## Firmware to Update Mapping
+## Web Managed Firmware to Update Mapping
 
 | Firmware Offset | Update Offset | Length     |
 | --------------- | ------------- | ---------- |
