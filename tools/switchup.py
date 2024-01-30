@@ -12,13 +12,13 @@ PAYLOAD_LENGTH = 0x2ffe + 0x1000
 
 
 def main() -> None:
-    print_or_exit = print if args.update else sys.exit
-
     parser = argparse.ArgumentParser(description='SWTG update firmware tool')
     parser.add_argument('-u', '--update', help='Re-calculate sums', action='store_true')
     parser.add_argument('firmware', type=argparse.FileType('r+b'))
 
     args = parser.parse_args()
+
+    print_or_exit = print if args.update else sys.exit
 
     with args.firmware as f:
         with mmap.mmap(f.fileno(), 0) as mm:
