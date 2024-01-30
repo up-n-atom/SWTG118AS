@@ -152,3 +152,16 @@ There 2 protected region(s).
 ## Update Firmware Validator and Updater
 
 [switchup.py](/tools/switchup.py)
+
+```bash
+usage: switchup.py [-h] [-u] firmware
+
+SWTG update firmware tool
+
+positional arguments:
+  firmware
+
+options:
+  -h, --help    show this help message and exit
+  -u, --update  Re-calculate sums
+```
