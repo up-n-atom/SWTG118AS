@@ -2,6 +2,13 @@
 
 # Web UI
 
+## Passwords
+
+| User        | Password        | Internal MD5 Hash                | CGI          |   |
+| ---------- | ---------------- | -------------------------------- | ------------ | - |
+| admin      | admin            | f6fdffe48c908deb0f4c3bd36c032e72 | login.cgi    | ✔️ |
+| hengrui    | ❓               | 81d57ea79621e8887914f40ee4122185 | login_ft.cgi | ❌ |
+
 ## Factory CGI
 
 > Factory CGI can be accessed directly via the admin credentials
@@ -11,13 +18,6 @@
 | ftdft.cgi   | Factory Defaults |
 | ftlogo.cgi  | Factory Logo     | 
 | ftcolor.cgi | Factory Colours  |
-
-## Passwords
-
-| User        | Password        | Internal MD5 Hash                | CGI          |
-| ---------- | ---------------- | -------------------------------- | ------------ |
-| admin      | admin            | f6fdffe48c908deb0f4c3bd36c032e72 | login.cgi    |
-| hengrui    |                  | 81d57ea79621e8887914f40ee4122185 | login_ft.cgi |
 
 # Serial CLI
 
