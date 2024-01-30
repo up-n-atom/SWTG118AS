@@ -155,11 +155,11 @@ There 2 protected region(s).
 
 ### Firmware to Update Mapping
 
-| Firmware Offset | Update Offset | Length     |
-| --------------- | ------------- | ---------- |
-| 0x00001000      | 0x00000014    | 0x00002ffe |
-| 0x0001C000      | 0x00003012    | 0x00001000 |
-| 0x0001D000      | 0x00003ffe    |            |
+| Firmware Offset | Length     | Update Offset | Length     |
+| --------------- | ---------- | ------------- | ---------- |
+| 0x00001000      | 0x00002ffe | 0x00000014    | 0x00002ffe |
+| 0x0001C000      | 0x00001000 | 0x00003012    | 0x00001000 |
+| 0x0001D000      | 0x001DF000 | 0x00003ffe    | eof        |
 
 ## Unmanaged
 
