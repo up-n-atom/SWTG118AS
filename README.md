@@ -127,9 +127,9 @@ RTL8372:
 
 ### Commands
 
-| Command                 | Description                              | Noes            |
+| Command                 | Description                              | Notes            |
 | ----------------------- | ---------------------------------------- | --------------- |
-| `dft`                   | Resets the default factory configuration | ⚠️ Uses the default model and version at `0x005DB50` and colours at `0x000DE520` |
+| `dft`                   | Resets the default factory configuration | ⚠️ Uses the defaults at `0x005DB50` and colours at `0x000DE520` |
 | `fiber `                | Displays SFP+ port status                ||
 | `gpio`                  | Displays GPIO 54 status                  ||
 | `poe`                   | Displays PoE status                      ||
