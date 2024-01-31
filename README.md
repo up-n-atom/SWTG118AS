@@ -124,21 +124,21 @@ RTL8372:
 
 ```
 
-
 ### Commands
 
-* `dft`
-* `fiber`
-* `gpio`
-* `poe`
-* `regset <reg>`
-* `regget <reg>`
-* `reboot`
-* `reset`
-* `showip`
-* `stp`
-* `web`
-
+| Command                 | Description                              |
+| ----------------------- | ---------------------------------------- |
+| `dft`                  | Resets the default factory configuration |
+| `fiber `               | Displays SFP+ port status                |
+| `gpio`                 | Displays GPIO 54 status                  |
+| `poe`                  | Displays PoE status                      |
+| `regset <reg> <value>` | Sets a register to a specified value     |
+| `regget <reg>`         | Display the specified registers value    |
+| `reboot`               | Reboots the switch                       |
+| `reset`                | Resets the user configuration            |
+| `showip`               | Displays the system information          |
+| `stp`                  | Displays the Spanning Tree details       |
+| `web`                  | Sets the web mode                        |
 
 ### SPI Flash Viewer
 
