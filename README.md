@@ -127,8 +127,17 @@ RTL8372:
 
 ### Commands
 
+* `dft`
+* `fiber`
 * `gpio`
+* `poe`
+* `regset <reg>`
+* `regget <reg>`
+* `reboot`
+* `reset`
+* `showip`
 * `stp`
+* `web`
 
 
 ### SPI Flash Viewer
