@@ -4,10 +4,10 @@
 
 ## Passwords
 
-| User        | Password        | Internal MD5 Hash                | CGI          |   |
-| ---------- | ---------------- | -------------------------------- | ------------ | - |
-| admin      | admin            | `f6fdffe48c908deb0f4c3bd36c032e72` | login.cgi    | ✔️ |
-| hengrui    | ❓               | `81d57ea79621e8887914f40ee4122185` | login_ft.cgi | ❌ |
+| User        | Password        | Internal MD5 Hash                  | CGI           |   |
+| ---------- | ---------------- | ---------------------------------- | ------------- | - |
+| admin      | admin            | `f6fdffe48c908deb0f4c3bd36c032e72` | login.cgi    | ✔|
+| hengrui    | ❓               | `81d57ea79621e8887914f40ee4122185` | login_ft.cgi  | ❌ |
 
 ## Factory CGI
 
@@ -27,12 +27,12 @@
 > [!WARNING]
 > The orientation is different for both boards
 
-| Pin  | SWTG115AS | SWTG118AS | Notes             |
-| ---- | --------- | --------- | ----------------- |
-| 1    | TX        | TX        | **Square Pad**    |
-| 2    | GND       | GND       |                   |
-| 3    | RX        | RX        |                   |
-| 4    | VCC       | VCC       | **Don't connect** |
+| Pin  | SWTG115AS | SWTG118AS | Notes               |
+| ---- | --------- | --------- | ------------------- |
+| 1    | TX        | TX        | **Square Pad**      |
+| 2    | GND       | GND       |                     |
+| 3    | RX        | RX        |                     |
+| 4    | VCC       | VCC       | ‼️ **Don't connect** |
 
 ## Baudrate
 
