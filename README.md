@@ -26,12 +26,12 @@
 > [!WARNING]
 > The orientation is different for both boards
 
-| Pins            | SWTG115AS | SWTG118AS | 
-| --------------- | --------- | --------- |
-| 1 **Square**    | TX        | TX        |
-| 2               | GND       | GND       |
-| 3               | RX        | RX        |
-| 4               | VCC       | VCC       |
+| Pins               | SWTG115AS | SWTG118AS | 
+| ------------------ | --------- | --------- |
+| 1 **Square**       | TX        | TX        |
+| 2                  | GND       | GND       |
+| 3                  | RX        | RX        |
+| 4 **Don't connect**| VCC       | VCC       |
 
 ## Baudrate
 
