@@ -13,8 +13,9 @@
 
 > Factory CGI can be accessed directly via the admin credentials
 
-| CGI        | Description      |
-| ---------- | ---------------- |
+| CGI         | Description      |
+| ----------- | ---------------- |
+| menu_ft.cgi | Factory Menu     |
 | ftdft.cgi   | Factory Defaults |
 | ftlogo.cgi  | Factory Logo     | 
 | ftcolor.cgi | Factory Colours  |
@@ -26,12 +27,12 @@
 > [!WARNING]
 > The orientation is different for both boards
 
-| Pins               | SWTG115AS | SWTG118AS | 
-| ------------------ | --------- | --------- |
-| 1 **Square**       | TX        | TX        |
-| 2                  | GND       | GND       |
-| 3                  | RX        | RX        |
-| 4 **Don't connect**| VCC       | VCC       |
+| Pin  | SWTG115AS | SWTG118AS | Notes             |
+| ---- | --------- | --------- | ----------------- |
+| 1    | TX        | TX        | **Square Pad**    |
+| 2    | GND       | GND       |                   |
+| 3    | RX        | RX        |                   |
+| 4    | VCC       | VCC       | **Don't connect** |
 
 ## Baudrate
 
@@ -126,19 +127,19 @@ RTL8372:
 
 ### Commands
 
-| Command                 | Description                              |
-| ----------------------- | ---------------------------------------- |
-| `dft`                  | Resets the default factory configuration |
-| `fiber `               | Displays SFP+ port status                |
-| `gpio`                 | Displays GPIO 54 status                  |
-| `poe`                  | Displays PoE status                      |
-| `regset <reg> <value>` | Sets a register to a specified value     |
-| `regget <reg>`         | Display the specified registers value    |
-| `reboot`               | Reboots the switch                       |
-| `reset`                | Resets the user configuration            |
-| `showip`               | Displays the system information          |
-| `stp`                  | Displays the Spanning Tree details       |
-| `web`                  | Sets the web mode                        |
+| Command                 | Description                              | Noes            |
+| ----------------------- | ---------------------------------------- | --------------- |
+| `dft`                   | Resets the default factory configuration | ⚠️ Uses the default model and version at `0x005DB50` and colours at `0x000DE520` |
+| `fiber `                | Displays SFP+ port status                ||
+| `gpio`                  | Displays GPIO 54 status                  ||
+| `poe`                   | Displays PoE status                      ||
+| `regset <reg> <value>`  | Sets a register to a specified value     ||
+| `regget <reg>`          | Display the specified registers value    ||
+| `reboot`                | Reboots the switch                       ||
+| `reset`                 | Resets the user configuration            ||
+| `showip`                | Displays the system information          ||
+| `stp`                   | Displays the Spanning Tree details       ||
+| `web`                   | Sets the web mode                        ||
 
 ### SPI Flash Viewer
 
