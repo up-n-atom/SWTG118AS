@@ -23,14 +23,15 @@ def main() -> None:
     with args.firmware as f:
         with mmap.mmap(f.fileno(), 0) as mm:
             header = bytearray(mm.read(HEADER_LENGTH))
-            
+
             magic, length, header_sum, payload_sum, reserved = struct.unpack('>5I', header)
-            
-            print(f"magic: {magic:08x}\n" \
-                  f"length: {length:08x}\n" \
-                  f"header sum: {header_sum:08x}\n" \
-                  f"payload sum: {payload_sum:08x}\n" \
-                  f"reserved: {reserved:08x}", header.hex(), sep='\n')
+
+            print(f"magic: {magic:08x}",
+                  f"length: {length:08x}",
+                  f"header sum: {header_sum:08x}",
+                  f"payload sum: {payload_sum:08x}",
+                  f"reserved: {reserved:08x}",
+                  header.hex(), sep='\n')
 
             if magic != HEADER_MAGIC:
                 sys.exit('Invalid header magic')
