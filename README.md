@@ -139,7 +139,7 @@ RTL8372:
 | `reset`                 | Resets the user configuration            ||
 | `showip`                | Displays the system information          ||
 | `stp`                   | Displays the Spanning Tree details       ||
-| `web`                   | Sets the web mode                        ||
+| `web`                   | Sets the web mode                        | Sets web config offsets `0x001FC026` and `0x001FC027` to `1`    |
 
 ### SPI Flash Viewer
 
@@ -169,9 +169,10 @@ There 2 protected region(s).
 
 ### Firmware Mapping
 
-| Firmware Offset | Length     | Description              |
-| --------------- | ---------- | ------------------------ |
+| Firmware Offset | Length       | Description              |
+| --------------- | ------------ | ------------------------ |
 | `0x001FC000`    | `0x00000006` | MAC address              |
+| `0x001FC026`    | `0x00000002` | Web/Dumb mode            |
 | `0x001FD000`    | `0x0000023D` | Factory settings         |
 | `0x001FE000`    | `0x00000A42` | User settings            |
 
