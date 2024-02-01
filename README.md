@@ -233,7 +233,7 @@ the following is set sds test mode,chip sel:8373/8372: 3, 8224: 4;
 
 # Tools
 
-## Update Firmware Validator and Updater
+## Update Firmware Checksum Calculator
 
 [calcsum.py](/tools/calcsum.py)
 
