@@ -12,7 +12,7 @@ PAYLOAD_LENGTH = 0x2ffe + 0x1000
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description='SWTG update firmware tool')
+    parser = argparse.ArgumentParser(description='SWTG Update Firmware Checksum Calculator')
     parser.add_argument('-u', '--update', help='Re-calculate sums', action='store_true')
     parser.add_argument('firmware', type=argparse.FileType('r+b'))
 

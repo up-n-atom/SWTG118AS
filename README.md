@@ -235,12 +235,12 @@ the following is set sds test mode,chip sel:8373/8372: 3, 8224: 4;
 
 ## Update Firmware Validator and Updater
 
-[switchup.py](/tools/switchup.py)
+[calcsum.py](/tools/calcsum.py)
 
 ```bash
-usage: switchup.py [-h] [-u] firmware
+usage: calcsum.py [-h] [-u] firmware
 
-SWTG update firmware tool
+SWTG Update Firmware Checksum Calculator
 
 positional arguments:
   firmware
