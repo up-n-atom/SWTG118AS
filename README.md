@@ -169,12 +169,12 @@ There 2 protected region(s).
 
 ### Firmware Mapping
 
-| Firmware Offset | Length       | Description              |
-| --------------- | ------------ | ------------------------ |
-| `0x001FC000`    | `0x00000006` | MAC address              |
-| `0x001FC026`    | `0x00000002` | Web/Dumb mode            |
-| `0x001FD000`    | `0x0000023D` | Factory settings         |
-| `0x001FE000`    | `0x00000A42` | User settings            |
+| Firmware Offset | Length       | Description              | Notes                                                       |
+| --------------- | ------------ | ------------------------ | ----------------------------------------------------------- |
+| `0x001FC000`    | `0x00000006` | MAC address              |                                                             |
+| `0x001FC026`    | `0x00000002` | Web/Dumb mode            | `0x00` = Dumb Mode, `0x01` = Web Mode, `0xFF` = Auto detect |
+| `0x001FD000`    | `0x0000023D` | Factory settings         |                                                             |
+| `0x001FE000`    | `0x00000A42` | User settings            |                                                             |
 
 ### Firmware to Update Mapping
 
