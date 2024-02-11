@@ -1,9 +1,9 @@
-# SWTGW115AS-v2 Transeiver Compatibility
+# SWTGW115AS-v2 Transceiver Compatibility
 
 <table>
     <thead>
         <tr>
-            <th>Transeiver</th>
+            <th>Transceiver</th>
             <th>Switch Firmware</th>
             <th>Link</th>
             <th>Speed</th>
