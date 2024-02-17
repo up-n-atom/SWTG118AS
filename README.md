@@ -141,6 +141,25 @@ RTL8372:
 | `stp`                   | Displays the Spanning Tree details       ||
 | `web`                   | Sets the web mode                        | Sets web config offsets `0x001FC026` and `0x001FC027` to `1`    |
 
+### Firmware Upload Failsafe
+
+If the runtime fails, the loader will fallback to the firmware upload sequence at `http://192.168.1.1`. It may also be triggered over serial by holding `ESC` on power on.
+
+
+```bash
+==========Loader start===========
+Press any key to start the normal procedure.
+To run SPI flash viewer, press [v]
+To enforce the download of the runtime kernel, press [ESC] .
+  cmd 27
+sal_sys_runtime_crc_set
+loader start
+load MAC from nvcfg
+  IP:192.168.1.1
+Mask:255.255.255.0
+  GW:192.168.1.254
+ MAC:AA.BB.CC.DD.EE.FF```
+
 ### SPI Flash Viewer
 
 ```bash
