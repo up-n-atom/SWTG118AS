@@ -158,7 +158,8 @@ load MAC from nvcfg
   IP:192.168.1.1
 Mask:255.255.255.0
   GW:192.168.1.254
- MAC:AA.BB.CC.DD.EE.FF```
+ MAC:AA.BB.CC.DD.EE.FF
+```
 
 ### SPI Flash Viewer
 
