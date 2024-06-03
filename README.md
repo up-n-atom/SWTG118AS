@@ -274,13 +274,13 @@ options:
   -u, --update  Re-calculate sums
 ```
 
-## Generate Flash Security Register Data (Web Managed)
+## Generate Flash Security Register/Sector Data (Web Managed)
 
 ### Dump Unique ID ie. command 42h
 
 #### Linux
 
-[IMSProg](https://github.com/bigbigmdm/IMSProg) - Available from the **Chip Info** dialog
+[IMSProg](https://github.com/bigbigmdm/IMSProg)
 
 #### Windows
 
@@ -290,7 +290,8 @@ options:
 
 #### Linux
 
-Replace uid with the first 4 bytes of the unique id
+> [!IMPORTANT]
+> Replace the `uid` to match the first 4 bytes of the dumped unique id
 
 ```bash
 uid='10093f30' bash -c 'echo -n "${uid,,}${uid,,}"' | openssl enc -nopad -aes-128-ecb -K $(printf '59494F4754fff00\0' | xxd -p | tr -d \n) | xxd -l 8 -p | tr -d \n | xxd -p
@@ -298,7 +299,10 @@ uid='10093f30' bash -c 'echo -n "${uid,,}${uid,,}"' | openssl enc -nopad -aes-12
 
 #### OS Agnostic
 
-Replace uid with the first 4 bytes of the unique id
+A simple python script
+
+> [!IMPORTANT]
+> Replace the `uid` to match the first 4 bytes of the dumped unique id
 
 ```python
 #!/usr/bin/python3
@@ -322,13 +326,14 @@ print(dat[:8].hex().encode('ascii').hex())
 
 #### Linux
 
-Requires addtional changes to `flashchips.c` to add the `.otp` field to supported chips.
+flashrom requires an [abandoned patchset](https://review.coreboot.org/q/otp) and most likely requires changes
+to `flashchips.c` to add the `.otp` field for supported chips.
 
-Check the help for how to use the`--otp-X` args after compiling.
+Additionally, check the help `flashrom -h` to learn how to use the `--otp-X` args after compiling.
 
 ```bash
 sudo apt-get install git make binutils build-essential ca-certificates libpci-dev libftdi-dev libusb-1.0-0-dev
-git clone https://github.com/flashrom/flashrom
+git clone https://review.coreboot.org/flashrom.git
 cd flashrom
 git fetch https://review.coreboot.org/flashrom refs/changes/13/59713/7 && git checkout FETCH_HEAD
 make
@@ -336,10 +341,23 @@ make
 
 #### Windows
 
-[AsProgrammer](https://github.com/nofeletru/UsbAsp-flash) - Scripts are required
+[AsProgrammer](https://github.com/nofeletru/UsbAsp-flash)
+
+Scripts are required and need to be modified for each vendor/flash. e.g.
 
 ```
 // FM25Q16A
+
+
+{$readUID} // Read Unique ID
+begin
+  if not SPIEnterProgMode(_SPI_SPEED_MAX) then LogPrint('Error setting SPI speed');
+
+  SPIWrite(0, 5, $4B, 0,0,0 0);
+  SPIReadToEditor(1, 8);
+
+  SPIExitProgMode();
+end
 
 {$eraseSS} // Erase Security Sector
 begin
