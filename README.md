@@ -293,7 +293,7 @@ options:
 Replace uid with the first 4 bytes of the unique id
 
 ```bash
-uid='10093f30' bash -c 'echo -n "${uid,,}${uid,,}"' | openssl enc -nopad -aes-128-ecb -K $(printf '59494F4754fff00\0' | xxd -p) | xxd -l 8 -p | xxd -p
+uid='10093f30' bash -c 'echo -n "${uid,,}${uid,,}"' | openssl enc -nopad -aes-128-ecb -K $(printf '59494F4754fff00\0' | xxd -p) | xxd -l 8 -p | tr -d \n | xxd -p
 ```
 
 #### OS Agnostic
