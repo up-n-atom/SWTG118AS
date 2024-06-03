@@ -293,7 +293,7 @@ options:
 Replace uid with the first 4 bytes of the unique id
 
 ```bash
-uid='10093f30' bash -c 'echo -n "${uid,,}${uid,,}"' | openssl enc -nopad -aes-128-ecb -K $(printf '59494F4754fff00\0' | xxd -p) | xxd -l 8 -p | tr -d \n | xxd -p
+uid='10093f30' bash -c 'echo -n "${uid,,}${uid,,}"' | openssl enc -nopad -aes-128-ecb -K $(printf '59494F4754fff00\0' | xxd -p | tr -d \n) | xxd -l 8 -p | tr -d \n | xxd -p
 ```
 
 #### OS Agnostic
@@ -308,11 +308,9 @@ from Crypto.Cipher import AES
 uid = b'10093f30'
 key = b'59494F4754fff00\0'
 
-pt = uid + uid
-
 aes = AES.new(key, AES.MODE_ECB)
 
-dat = aes.encrypt(pt)
+dat = aes.encrypt(uid + uid)
 
 print(dat[:8].hex().encode('ascii').hex())
 ```
@@ -338,7 +336,7 @@ make
 
 #### Windows
 
-[AsProgrammer](https://github.com/nofeletru/UsbAsp-flash) - Scripts are required (read datasheet)
+[AsProgrammer](https://github.com/nofeletru/UsbAsp-flash) - Scripts are required
 
 ```
 // FM25Q16A
@@ -379,7 +377,7 @@ begin
   SPIExitProgMode();
 end
 
-{$readSS} // Write Security Sectors
+{$writeSS} // Write Security Sectors
 begin
   if not SPIEnterProgMode(_SPI_SPEED_MAX) then LogPrint('Error setting SPI speed');
 
