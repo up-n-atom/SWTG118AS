@@ -286,17 +286,15 @@ options:
 
 [AsProgrammer](https://github.com/nofeletru/UsbAsp-flash) 
 
-### Generate Data
+### Generate 16-byte Data
 
 #### Linux
 
 Replace uid with the first 4 bytes of the unique id
 
 ```bash
-uid='10093f30' bash -c 'echo -n "${uid,,}${uid,,}"' | openssl enc -nopad -aes-128-ecb -K $(printf '59494F4754fff00\0' | xxd -p) | xxd -l 8 -p
+uid='10093f30' bash -c 'echo -n "${uid,,}${uid,,}"' | openssl enc -nopad -aes-128-ecb -K $(printf '59494F4754fff00\0' | xxd -p) | xxd -l 8 -p | xxd -p
 ```
-
-Further pipe to `xxd -p` to convert to hex for writing
 
 #### OS Agnostic
 
@@ -316,7 +314,7 @@ aes = AES.new(key, AES.MODE_ECB)
 
 dat = aes.encrypt(pt)
 
-print(dat[:8].hex())
+print(dat[:8].hex().encode('ascii').hex())
 ```
 
 ### Write Security Register
