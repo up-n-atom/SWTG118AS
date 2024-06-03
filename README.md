@@ -273,3 +273,140 @@ options:
   -h, --help    show this help message and exit
   -u, --update  Re-calculate sums
 ```
+
+## Generate Flash Security Register Data (Web Managed)
+
+### Dump Unique ID ie. command 42h
+
+#### Linux
+
+[IMSProg](https://github.com/bigbigmdm/IMSProg) - Available from the **Chip Info** dialog
+
+#### Windows
+
+[AsProgrammer](https://github.com/nofeletru/UsbAsp-flash) 
+
+### Generate Data
+
+#### Linux
+
+Replace uid with the first 4 bytes of the unique id
+
+```bash
+uid='10093f30' bash -c 'echo -n "${uid,,}${uid,,}"' | openssl enc -nopad -aes-128-ecb -K $(printf '59494F4754fff00\0' | xxd -p) | xxd -l 8 -p
+```
+
+Further pipe to `xxd -p` to convert to hex for writing
+
+#### OS Agnostic
+
+Replace uid with the first 4 bytes of the unique id
+
+```python
+#!/usr/bin/python3
+
+from Crypto.Cipher import AES
+
+uid = b'10093f30'
+key = b'59494F4754fff00\0'
+
+pt = uid + uid
+
+aes = AES.new(key, AES.MODE_ECB)
+
+dat = aes.encrypt(pt)
+
+print(dat[:8].hex())
+```
+
+### Write Security Register
+
+> [!WARNING]
+> This section is incomplete due the lack of software support.
+
+#### Linux
+
+Requires addtional changes to `flashchips.c` to add the `.otp` field to supported chips.
+
+Check the help for how to use the`--otp-X` args after compiling.
+
+```bash
+sudo apt-get install git make binutils build-essential ca-certificates libpci-dev libftdi-dev libusb-1.0-0-dev
+git clone https://github.com/flashrom/flashrom
+cd flashrom
+git fetch https://review.coreboot.org/flashrom refs/changes/13/59713/7 && git checkout FETCH_HEAD
+make
+```
+
+#### Windows
+
+[AsProgrammer](https://github.com/nofeletru/UsbAsp-flash) - Scripts are required (read datasheet)
+
+```
+// FM25Q16A
+
+{$eraseSS} // Erase Security Sector
+begin
+  if not SPIEnterProgMode(_SPI_SPEED_MAX) then LogPrint('Error setting SPI speed');
+
+  SPIWrite(1, 1, $06); //write enable
+  SPIWrite(0, 4, $44, 0,0,0);
+
+  //Busy?
+  sreg := 0;
+  repeat
+    SPIWrite(0, 1, $05);
+    SPIRead(1, 1, sreg);
+  until((sreg and 1) <> 1);
+
+  SPIExitProgMode();
+end
+
+{$readSS} // Read Security Sectors
+begin
+  if not SPIEnterProgMode(_SPI_SPEED_MAX) then LogPrint('Error setting SPI speed');
+
+  PageSize := 256;
+  SectorSize := 1024;
+  ProgressBar(0, (SectorSize / PageSize)-1, 0);
+
+  for i:=0 to (SectorSize / PageSize)-1 do
+  begin
+    SPIWrite(0, 5, $48, 0,0,i,0);
+    SPIReadToEditor(1, PageSize);
+    ProgressBar(1);
+  end;
+
+  ProgressBar(0, 0, 0);
+  SPIExitProgMode();
+end
+
+{$readSS} // Write Security Sectors
+begin
+  if not SPIEnterProgMode(_SPI_SPEED_MAX) then LogPrint('Error setting SPI speed');
+
+  PageSize := 256;
+  SectorSize := 1024;
+  ProgressBar(0, (SectorSize / PageSize)-1, 0);
+
+  for i:=0 to (SectorSize / PageSize)-1 do
+  begin
+    SPIWrite(1, 1, $06); //write enable
+    SPIWrite(0, 4, $42, 0,0,i);
+    SPIWriteFromEditor(1, PageSize, i*PageSize); //write data
+
+    //Busy?
+    sreg := 0;
+    repeat
+      SPIWrite(0, 1, $05);
+      SPIRead(1, 1, sreg);
+    until((sreg and 1) <> 1);
+
+    ProgressBar(1);
+  end;
+
+  ProgressBar(0, 0, 0);
+  SPIExitProgMode();
+end
+```
+
