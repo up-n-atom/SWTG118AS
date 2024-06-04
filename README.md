@@ -348,12 +348,11 @@ Scripts are required and need to be modified for each vendor/flash. e.g.
 ```
 // FM25Q16A
 
-
 {$readUID} // Read Unique ID
 begin
   if not SPIEnterProgMode(_SPI_SPEED_MAX) then LogPrint('Error setting SPI speed');
 
-  SPIWrite(0, 5, $4B, 0,0,0 0);
+  SPIWrite(0, 5, $4B, 0,0,0,0);
   SPIReadToEditor(1, 8);
 
   SPIExitProgMode();
