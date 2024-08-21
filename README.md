@@ -318,7 +318,7 @@ aes = AES.new(key, AES.MODE_ECB)
 
 dat = aes.encrypt(uid + uid)
 
-print(dat[:8].hex().encode('ascii').hex())
+print(dat[:8].hex())
 ```
 
 ### Write Security Register
