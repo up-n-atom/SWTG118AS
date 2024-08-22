@@ -278,6 +278,12 @@ options:
 
 ## Generate Flash Security Register/Sector Data (Web Managed)
 
+### CH341A Mini Programmer Setup
+
+3.3V mod https://www.eevblog.com/forum/repair/ch341a-serial-memory-programmer-power-supply-fix/
+
+![CH341A](https://github.com/user-attachments/assets/a40722e8-7620-4263-a019-2814289d137b)
+
 ### Dump Unique ID ie. command 42h
 
 #### Linux
