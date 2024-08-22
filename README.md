@@ -288,7 +288,9 @@ options:
 
 #### Windows
 
-[AsProgrammer](https://github.com/nofeletru/UsbAsp-flash) 
+[AsProgrammer](https://github.com/nofeletru/UsbAsp-flash)
+
+![Unique ID](https://github.com/user-attachments/assets/74aa02ff-ce02-4172-9834-d4d7a9ca14da)
 
 ### Generate 16-byte Data
 
