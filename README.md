@@ -361,6 +361,8 @@ make
 
 Scripts are required and need to be modified for each vendor/flash. e.g.
 
+The following script is a modification of https://github.com/nofeletru/UsbAsp-flash/blob/master/scripts/GPR25L3203F_OTP.pas for the FM25Q16A.
+
 ```
 // FM25Q16A
 
@@ -374,24 +376,25 @@ begin
   SPIExitProgMode();
 end
 
-{$eraseSS} // Erase Security Sector
+{$eraseSS} // Erase Security Registers
 begin
   if not SPIEnterProgMode(_SPI_SPEED_MAX) then LogPrint('Error setting SPI speed');
 
-  SPIWrite(1, 1, $06); //write enable
-  SPIWrite(0, 4, $44, 0,0,0);
+  SPIWrite(1, 1, $06); // Write Enable
+  SPIWrite(0, 4, $44, 0,0,0); // Erase Security Registers
 
-  //Busy?
   sreg := 0;
   repeat
     SPIWrite(0, 1, $05);
     SPIRead(1, 1, sreg);
-  until((sreg and 1) <> 1);
+  until((sreg and 1) <> 1); // Check WIP bit
+
+  SPIWrite(1, 1, $04); // Write Disable
 
   SPIExitProgMode();
 end
 
-{$readSS} // Read Security Sectors
+{$readSS} // Read Security Registers
 begin
   if not SPIEnterProgMode(_SPI_SPEED_MAX) then LogPrint('Error setting SPI speed');
 
@@ -401,7 +404,7 @@ begin
 
   for i:=0 to (SectorSize / PageSize)-1 do
   begin
-    SPIWrite(0, 5, $48, 0,0,i,0);
+    SPIWrite(0, 5, $48, 0,0,i,0); // Read Security Registers
     SPIReadToEditor(1, PageSize);
     ProgressBar(1);
   end;
@@ -410,7 +413,7 @@ begin
   SPIExitProgMode();
 end
 
-{$writeSS} // Write Security Sectors
+{$writeSS} // Write Security Registers
 begin
   if not SPIEnterProgMode(_SPI_SPEED_MAX) then LogPrint('Error setting SPI speed');
 
@@ -418,21 +421,23 @@ begin
   SectorSize := 1024;
   ProgressBar(0, (SectorSize / PageSize)-1, 0);
 
+  SPIWrite(1, 1, $06); // Write Enable
+
   for i:=0 to (SectorSize / PageSize)-1 do
   begin
-    SPIWrite(1, 1, $06); //write enable
-    SPIWrite(0, 4, $42, 0,0,i);
-    SPIWriteFromEditor(1, PageSize, i*PageSize); //write data
+    SPIWrite(0, 4, $42, 0,0,i); // Program Security Registers
+    SPIWriteFromEditor(1, PageSize, i*PageSize); // Write Data
 
-    //Busy?
     sreg := 0;
     repeat
       SPIWrite(0, 1, $05);
       SPIRead(1, 1, sreg);
-    until((sreg and 1) <> 1);
+    until((sreg and 1) <> 1); // Check WIP bit
 
     ProgressBar(1);
   end;
+
+  SPIWrite(1, 1, $04); // Write Disable
 
   ProgressBar(0, 0, 0);
   SPIExitProgMode();
