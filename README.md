@@ -316,33 +316,13 @@ A simple python script
 > [!IMPORTANT]
 > Pass in the first 4 bytes of the dumped unique ID as the first argument. By default it will use the FM25Q16A unique ID used in the web managed products.
 
-```python
-#!/usr/bin/python3
-
-import sys
-
-try:
-    from Crypto.Cipher import AES
-except ImportError:
-    from Cryptodome.Cipher import AES
-
-uid = b'10093f30'
-key = b'59494F4754fff00\0'
-
-if __name__ == "__main__":
-    if len(sys.argv) > 1 and len(sys.argv[1]) == 8:
-        uid = bytes(sys.argv[1], 'ascii')
-    print('unique id:', uid.decode('ascii'))
-    aes = AES.new(key, AES.MODE_ECB)
-    dat = aes.encrypt(uid + uid)
-    print('encrypted uid:', dat[:8].hex())
-```
+[encuid.py](/tools/encuid.py)
 
 ```shell
 python -m venv .venv
 source .venv/bin/activate
 python3 -m pip install pycrypto
-python3 enc.py
+python3 encuid.py
 ```
 
 ### Write Security Register
