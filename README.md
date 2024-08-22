@@ -284,6 +284,8 @@ options:
 
 [IMSProg](https://github.com/bigbigmdm/IMSProg)
 
+![Unique ID](https://github.com/user-attachments/assets/7fffc7ec-c8cb-433a-a0f1-45f65d04ba8e)
+
 #### Windows
 
 [AsProgrammer](https://github.com/nofeletru/UsbAsp-flash) 
@@ -361,6 +363,8 @@ make
 
 Scripts are required and need to be modified for each vendor/flash. e.g.
 
+The following script is a modification of https://github.com/nofeletru/UsbAsp-flash/blob/master/scripts/GPR25L3203F_OTP.pas for the FM25Q16A https://www.fmsh.com/nvm/FM25Q16A_ds_eng.pdf
+
 ```
 // FM25Q16A
 
@@ -378,7 +382,7 @@ end
 begin
   if not SPIEnterProgMode(_SPI_SPEED_MAX) then LogPrint('Error setting SPI speed');
 
-  SPIWrite(1, 1, $06); //write enable
+  SPIWrite(1, 1, $06); // Write Enable
   SPIWrite(0, 4, $44, 0,0,0);
 
   //Busy?
@@ -391,7 +395,7 @@ begin
   SPIExitProgMode();
 end
 
-{$readSS} // Read Security Sectors
+{$readSS} // Read Security Sector
 begin
   if not SPIEnterProgMode(_SPI_SPEED_MAX) then LogPrint('Error setting SPI speed');
 
@@ -410,7 +414,7 @@ begin
   SPIExitProgMode();
 end
 
-{$writeSS} // Write Security Sectors
+{$writeSS} // Write Security Sector
 begin
   if not SPIEnterProgMode(_SPI_SPEED_MAX) then LogPrint('Error setting SPI speed');
 
@@ -420,9 +424,9 @@ begin
 
   for i:=0 to (SectorSize / PageSize)-1 do
   begin
-    SPIWrite(1, 1, $06); //write enable
+    SPIWrite(1, 1, $06); // Write Enable
     SPIWrite(0, 4, $42, 0,0,i);
-    SPIWriteFromEditor(1, PageSize, i*PageSize); //write data
+    SPIWriteFromEditor(1, PageSize, i*PageSize); // Write Data
 
     //Busy?
     sreg := 0;
