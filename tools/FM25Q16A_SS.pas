@@ -1,4 +1,5 @@
 // FM25Q16A
+// Modified https://github.com/nofeletru/UsbAsp-flash/blob/master/scripts/GPR25L3203F_OTP.pas
 
 {$readUID} // Read Unique ID
 begin
