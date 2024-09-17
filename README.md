@@ -17,12 +17,12 @@
 
 > Factory CGI can be accessed directly via the admin credentials
 
-| CGI         | Description      |
-| ----------- | ---------------- |
-| menu_ft.cgi | Factory Menu     |
-| ftdft.cgi   | Factory Defaults |
-| ftlogo.cgi  | Factory Logo     | 
-| ftcolor.cgi | Factory Colours  |
+| CGI                              | Description      |
+| -------------------------------- | ---------------- |
+| <http://192.168.2.1/menu_ft.cgi> | Factory Menu     |
+| <http://192.168.2.1/ftdft.cgi>   | Factory Defaults |
+| <http://192.168.2.1/ftlogo.cgi>  | Factory Logo     | 
+| <http://192.168.2.1/ftcolor.cgi> | Factory Colours  |
 
 # Serial CLI
 
