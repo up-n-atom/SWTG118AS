@@ -114,9 +114,13 @@ sal_port_config_restore()...OK
 
 ```
 
-### Password
+###  SWTG118AS/SWTG115AS/SWTG124AS Password
 
 The *"uboot"* password is `Switch321`
+
+### SWTGW215AS Password
+
+The *"uboot"* password is `Hs2021cfgmg` 
 
 ```bash
 Login OK.
