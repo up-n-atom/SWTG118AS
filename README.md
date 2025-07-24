@@ -198,7 +198,7 @@ There 2 protected region(s).
 
 | Firmware Offset | Length       | Description              | Notes                                                       |
 | --------------- | ------------ | ------------------------ | ----------------------------------------------------------- |
-| `0x00030F38`    | `0x00000010` | uboot Password           |
+| `0x00030F38`    | `0x0000000A` | uboot Password           |
 | `0x000DD55F`    | `0x00000010` | AES Key                  | For lower case flash unique ID                              |
 | `0x000DD57F`    | `0x00000010` | AES Key                  | For upper case flash unique ID                              |
 | `0x001FC000`    | `0x00000006` | MAC address              |                                                             |
