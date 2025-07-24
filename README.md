@@ -114,13 +114,12 @@ sal_port_config_restore()...OK
 
 ```
 
-###  SWTG118AS/SWTG115AS/SWTG124AS Password
+### *uboot* Password
 
-The *"uboot"* password is `Switch321`
-
-### SWTGW215AS Password
-
-The *"uboot"* password is `Hs2021cfgmg` 
+| Switch Model                                  | *"uboot"* Password |
+| --------------------------------------------- | ------------------ |
+| **SWTG118AS** / **SWTG115AS** / **SWTG124AS** | `Switch321`        |
+| **SWTGW215AS**                                | `Hs2021cfgmg`      |
 
 ```bash
 Login OK.
@@ -199,6 +198,7 @@ There 2 protected region(s).
 
 | Firmware Offset | Length       | Description              | Notes                                                       |
 | --------------- | ------------ | ------------------------ | ----------------------------------------------------------- |
+| `0x00030F38`    | `0x00000010` | uboot Password           |
 | `0x000DD55F`    | `0x00000010` | AES Key                  | For lower case flash unique ID                              |
 | `0x000DD57F`    | `0x00000010` | AES Key                  | For upper case flash unique ID                              |
 | `0x001FC000`    | `0x00000006` | MAC address              |                                                             |
