@@ -3,6 +3,8 @@
 - SWTG118AS
 - SWTG115AS
 - SWTG124AS
+- SWTGW215AS
+- SWTG024AS
 
 # Web UI
 
@@ -120,6 +122,7 @@ sal_port_config_restore()...OK
 | --------------------------------------------- | ------------------ |
 | **SWTG118AS** / **SWTG115AS** / **SWTG124AS** | `Switch321`        |
 | **SWTGW215AS**                                | `Hs2021cfgmg`      |
+| **SWTG024AS-A-V2.0.1**                        | `Lx+2035&asp`      |
 
 ```bash
 Login OK.
