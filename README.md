@@ -305,9 +305,11 @@ options:
 
 ![Unique ID](https://github.com/user-attachments/assets/74aa02ff-ce02-4172-9834-d4d7a9ca14da)
 
-### Generate 16-byte Data
+### Hardware versions prior to v2.0.1
 
-#### Linux
+#### Generate 16-byte Data
+
+##### Linux
 
 > [!IMPORTANT]
 > Replace the `uid` to match the first 4 bytes of the dumped unique id
@@ -316,7 +318,7 @@ options:
 uid='10093f30' bash -c 'echo -n "${uid,,}${uid,,}"' | openssl enc -nopad -aes-128-ecb -K $(printf '59494F4754fff00\0' | xxd -p | tr -d \n) | xxd -l 8 -p | tr -d \n | xxd -p
 ```
 
-#### OS Agnostic
+##### OS Agnostic
 
 A simple python script
 
@@ -331,6 +333,34 @@ source .venv/bin/activate
 python3 -m pip install pycrypto
 python3 encuid.py
 ```
+
+### Hardware version 2.0.1
+
+The AES-ECB algo was modified, along with an obfuscated key and altered plaintext based from the UID. A new C tool, [encuid2](/tools/encuid2), implements the algo.
+
+#### Compile Tool
+
+The tool requires and fetches https://github.com/kokke/tiny-AES-c, and applies the first algo patch [swtg_nonsense.patch](/tools/encuid2/swtg_nonsense.patch); The remaining algo implementation are found in [encuid2.c](/tools/encuid2/encuid2.c)
+
+```shell
+mkdir tools/build
+cd tools/build
+cmake ../encuid2/
+make
+```
+
+#### Generate Encrypted Data
+
+```shell
+encuid2
+> Usage: encuid2 <uid>
+```
+
+```shell
+encuid2 E6632C25A344B330
+> 8b6b188f4c89279608de84cc514a4cff2caab8223dac2ecbada0909e4698626e
+```
+
 
 ### Write Security Register
 

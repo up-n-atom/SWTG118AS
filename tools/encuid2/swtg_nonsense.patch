@@ -1,0 +1,52 @@
+diff --git a/aes.c b/aes.c
+index 4481f7b..75b2e56 100644
+--- a/aes.c
++++ b/aes.c
+@@ -296,11 +296,34 @@ static uint8_t xtime(uint8_t x)
+   return ((x<<1) ^ (((x>>7) & 1) * 0x1b));
+ }
+ 
++#if defined(SWTG) && (SWTG == 1)
++
++static void Manipulate(state_t* state, uint8_t multiplier)
++{
++  uint8_t i, j;
++  for (i = 0; i < 4; ++i)
++  {
++    for (j = 0; j < 4; ++j)
++    {
++      (*state)[j][i] *= multiplier;
++    }
++  }
++}
++
++#endif
++
+ // MixColumns function mixes the columns of the state matrix
+ static void MixColumns(state_t* state)
+ {
+   uint8_t i;
+   uint8_t Tmp, Tm, t;
++
++#if defined(SWTG) && (SWTG == 1)
++
++  Manipulate(state, 0x41);
++
++#endif
++
+   for (i = 0; i < 4; ++i)
+   {  
+     t   = (*state)[i][0];
+@@ -433,6 +456,12 @@ static void Cipher(state_t* state, const uint8_t* RoundKey)
+   }
+   // Add round key to last round
+   AddRoundKey(Nr, state, RoundKey);
++
++#if defined(SWTG) && (SWTG == 1)
++
++  Manipulate(state, 0x29);
++
++#endif
+ }
+ 
+ #if (defined(CBC) && CBC == 1) || (defined(ECB) && ECB == 1)
