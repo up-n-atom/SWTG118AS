@@ -49,8 +49,8 @@ int main(int argc, char *argv[]) {
 
     snprintf(buf, 9, "%08x", (uint32_t)val);
 
-    for (int i = 0; i < 3; i++) {
-        strncat(buf, buf, 8);
+    for (int i = 1; i < 3; i++) {
+        strncat(buf, buf, i << 3);
     }
 
     buf[0]  = '@';
