@@ -5,12 +5,13 @@
 #include <ctype.h>
 #include <errno.h>
 #include <limits.h>
-#include <endian.h>
 
 #include "aes.h"
 
-#define BUF_SIZE 32 + 1
+#define BUF_SIZE 32 + 1 /* includes null terminator */
 
+/* the key is obfuscated and generated based on fixed input but for simplicity
+   sake statically defined here */
 #define KEY_STRING "S@gi0PneW^#*T1Zb"
 
 int main(int argc, char *argv[]) {
@@ -42,9 +43,12 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    val = le64toh(val);
+    /* take the 40 msb of the uid and shift right by 2 ie. >> 24 + 2
+       
+       E6632C25A344B330 >> 18 (24 dec)
+       E6632C25A3 >> 2
+       3998CB0968 & FFFFFFFF (taken care by the cast to uint32_t) */
     val >>= 26;
-    val &= 0x00ffffffff;
 
     char buf[BUF_SIZE] = {0};
 
@@ -74,10 +78,13 @@ int main(int argc, char *argv[]) {
     AES_init_ctx(&ctx, (const uint8_t *)key);
 
     for (size_t i = 0; i < (sizeof(buf) >> 4); i++) {
+        /* swtg adds a coefficient prior to MixColumns and after the last
+           round in the Cipher function. note: swtg firmware uses a flag */
         AES_ECB_encrypt(&ctx, (uint8_t *)&buf[i << 4]);
     }
 
     for (size_t i = 0; i < (sizeof(buf) & ~0xf); i++) {
+        /* output whitening */
         printf("%02hhx", (uint8_t)buf[i] ^ (uint8_t)(i % 16));
     }
 
