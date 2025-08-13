@@ -45,15 +45,26 @@ int main(int argc, char *argv[]) {
 
     /* take the 40 msb of the uid and shift right by 2 ie. >> 24 + 2
        
-       E6632C25A344B330 >> 18 (24 dec)
-       E6632C25A3 >> 2
-       3998CB0968 & FFFFFFFF (taken care by the cast to uint32_t) */
+       eg.
+
+       e6632c25a344b330 >> 18 (24 dec)
+       e6632c25a3 >> 2
+       3998cb0968 & ffffffff (taken care by the cast to uint32_t)
+       98cb0968 */
     val >>= 26;
 
     char buf[BUF_SIZE] = {0};
 
-    snprintf(buf, 9, "%08x", (uint32_t)val);
+    snprintf(buf, 9, "%08x", (uint32_t)val); /* lowercase */
 
+    /* create a 32-char repeated string from the sliced and shifted uid
+       hexadecimal representation
+
+       eg.
+
+       98cb0968
+       98cb096898cb0968
+       98cb096898cb096898cb096898cb0968 */
     for (int i = 1; i < 3; i++) {
         strncat(buf, buf, i << 3);
     }
