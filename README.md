@@ -340,7 +340,7 @@ The AES-ECB algo was modified, along with an obfuscated key and altered plaintex
 
 #### Compile Tool
 
-The tool requires and fetches https://github.com/kokke/tiny-AES-c, and applies the first algo patch [swtg_nonsense.patch](/tools/encuid2/swtg_nonsense.patch); The remaining algo implementation are found in [encuid2.c](/tools/encuid2/encuid2.c)
+The tool requires and fetches https://github.com/kokke/tiny-AES-c, and applies the first algo patch [swtg_nonsense.patch](/tools/encuid2/swtg_nonsense.patch); The remainder of the algo is implemented in [encuid2.c](/tools/encuid2/encuid2.c).
 
 ```shell
 mkdir tools/build
