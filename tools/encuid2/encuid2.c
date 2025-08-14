@@ -38,7 +38,9 @@ int main(int argc, char *argv[]) {
 
     uint64_t val = strtoull(uid, NULL, 16);
 
-    if ((val == ULLONG_MAX && errno == ERANGE) || val == 0) {
+    /* regard ffffffffffffffff and 0000000000000000 entries as invalid
+       if errno is ERANGE, ULLONG_MAX is returned 2 birds 1 stone */
+    if (val == ULLONG_MAX || val == 0) {
         fputs("Error: uid is nil or too large\n", stderr);
         return EXIT_FAILURE;
     }
