@@ -95,16 +95,17 @@ def main() -> None:
     print_or_exit = print if args.update else exit
 
     with args.firmware as f, mmap(f.fileno(), 0) as mm:
-        header = None
         match int.from_bytes(buffer := mm.read(2), byteorder='little'):
             case 0x4000:
                 binary = FileType.FULL
             case 0x3412:
                 buffer += mm.read(HEADER_LENGTH - 2)
+
                 header = Header.from_bytes(buffer)
+
                 binary = FileType.UPDATE if header and (header.length + HEADER_LENGTH) == mm.size() else FileType.UNKNOWN
             case _:
-                exit('Invalid binary')
+                binary = FileType.UNKNOWN
 
         if binary is FileType.UNKNOWN:
             exit('Invalid binary')
