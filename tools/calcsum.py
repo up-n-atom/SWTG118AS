@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from dataclasses import dataclass, field, asdict, astuple
+from dataclasses import dataclass, astuple
 from enum import Enum, auto
 from mmap import mmap
 from struct import pack, unpack
