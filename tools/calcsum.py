@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import argparse
 import os
 
-from dataclasses import dataclass, astuple
+from dataclasses import dataclass, asdict, astuple
 from enum import Enum, auto
 from mmap import mmap
 from struct import pack, unpack
@@ -39,7 +41,7 @@ class Header:
     payload_sum: int = 0
     reserved: int = HEADER_RESERVED
 
-    def __setattr__(self, name, value) -> None:
+    def __setattr__(self, name: str, value: object) -> None:
         if name == 'magic' and value != HEADER_MAGIC:
             raise AttributeError('Invalid magic value')
         elif name == 'reserved' and value != HEADER_RESERVED:
@@ -55,34 +57,32 @@ class Header:
         return Header.is_valid(self)
 
     def __bytes__(self) -> bytes:
-        return Header.to_bytes(self)
+        return self.to_bytes()
 
     def __str__(self) -> str:
-        return "magic: {:08x}\n" \
-               "length: {:08x}\n" \
-               "header sum: {:08x}\n" \
-               "payload sum: {:08x}\n" \
-               "reserved: {:08x}".format(*astuple(self))
+        return "\n".join(f"{key.replace('_', ' ')}: {value:08x}" for key, value in asdict(self).items())
+
+    def to_bytes(self) -> bytes:
+        return pack('>5I', *astuple(self))
 
     @staticmethod
-    def calc_sum(header) -> None:
+    def calc_sum(header: Header) -> int:
         buffer = bytearray(bytes(header))
         buffer[8:12] = bytearray(4)
         return sum(buffer)
 
     @staticmethod
-    def is_valid(header, ignore_sum=True) -> bool:
+    def is_valid(header: Header, ignore_sum: bool = True) -> bool:
         return header.magic == HEADER_MAGIC and \
                header.reserved == HEADER_RESERVED and \
                (ignore_sum or header.header_sum == Header.calc_sum(header))
 
-    @staticmethod
-    def to_bytes(header) -> bytes:
-        return pack('>5I', *astuple(header))
+    @classmethod
+    def from_bytes(cls, buffer: bytes) -> Header:
+        if len(buffer) != HEADER_LENGTH:
+            raise ValueError('Invalid header length')
 
-    @staticmethod
-    def from_bytes(buffer: bytes) -> None:
-        return Header(*unpack('>5I', buffer))
+        return cls(*unpack('>5I', buffer))
 
 
 def main() -> None:
