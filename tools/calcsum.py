@@ -27,7 +27,7 @@ UPDATE_PAYLOAD_BLOCK_2_OFFSET = HEADER_LENGTH + PAYLOAD_BLOCK_1_LENGTH
 UPDATE_PAYLOAD_BLOCK_3_OFFSET = HEADER_LENGTH + PAYLOAD_BLOCK_1_LENGTH + PAYLOAD_BLOCK_2_LENGTH
 
 
-class FileType(Enum):
+class FirmwareType(Enum):
     UNKNOWN = auto()
     FULL = auto()
     UPDATE = auto()
@@ -43,9 +43,9 @@ class Header:
 
     def __setattr__(self, name: str, value: object) -> None:
         if name == 'magic' and value != HEADER_MAGIC:
-            raise AttributeError('Invalid magic value')
+            raise ValueError('Invalid magic value')
         elif name == 'reserved' and value != HEADER_RESERVED:
-            raise AttributeError('Invalid reserved value')
+            raise ValueError('Invalid reserved value')
 
         object.__setattr__(self, name, value)
 
@@ -95,34 +95,36 @@ def main() -> None:
     print_or_exit = print if args.update else exit
 
     with args.firmware as f, mmap(f.fileno(), 0) as mm:
-        match int.from_bytes(buffer := mm.read(2), byteorder='little'):
+        binary = FirmwareType.UNKNOWN
+
+        buffer = mm.read(2)
+
+        match int.from_bytes(buffer, byteorder='little'):
             case 0x4000:
-                binary = FileType.FULL
+                binary = FirmwareType.FULL
             case 0x3412:
                 buffer += mm.read(HEADER_LENGTH - 2)
 
                 header = Header.from_bytes(buffer)
 
-                binary = FileType.UPDATE if header and (header.length + HEADER_LENGTH) == mm.size() else FileType.UNKNOWN
-            case _:
-                binary = FileType.UNKNOWN
+                binary = FirmwareType.UPDATE if header and (header.length + HEADER_LENGTH) == mm.size() else FirmwareType.UNKNOWN
 
-        if binary is FileType.UNKNOWN:
+        if binary is FirmwareType.UNKNOWN:
             exit('Invalid binary')
 
-        offset, length = (FULL_PAYLOAD_BLOCK_1_OFFSET, PAYLOAD_BLOCK_1_LENGTH) if binary is FileType.FULL else (UPDATE_PAYLOAD_BLOCK_1_OFFSET, PAYLOAD_BLOCK_1_LENGTH)
+        offset, length = (FULL_PAYLOAD_BLOCK_1_OFFSET, PAYLOAD_BLOCK_1_LENGTH) if binary is FirmwareType.FULL else (UPDATE_PAYLOAD_BLOCK_1_OFFSET, PAYLOAD_BLOCK_1_LENGTH)
 
         mm.seek(offset, os.SEEK_SET)
 
         payload_sum = sum(mm.read(length))
 
-        offset, length = (FULL_PAYLOAD_BLOCK_2_OFFSET, PAYLOAD_BLOCK_2_LENGTH) if binary is FileType.FULL else (UPDATE_PAYLOAD_BLOCK_2_OFFSET, PAYLOAD_BLOCK_2_LENGTH)
+        offset, length = (FULL_PAYLOAD_BLOCK_2_OFFSET, PAYLOAD_BLOCK_2_LENGTH) if binary is FirmwareType.FULL else (UPDATE_PAYLOAD_BLOCK_2_OFFSET, PAYLOAD_BLOCK_2_LENGTH)
 
         mm.seek(offset, os.SEEK_SET)
 
         payload_sum += sum(mm.read(length))
 
-        offset = FULL_PAYLOAD_BLOCK_3_OFFSET if binary is FileType.FULL else UPDATE_PAYLOAD_BLOCK_3_OFFSET
+        offset = FULL_PAYLOAD_BLOCK_3_OFFSET if binary is FirmwareType.FULL else UPDATE_PAYLOAD_BLOCK_3_OFFSET
 
         mm.seek(offset, os.SEEK_SET)
 
@@ -149,7 +151,7 @@ def main() -> None:
 
             print('New header: {}'.format(bytes(header).hex()))
 
-            if binary is FileType.UPDATE:
+            if binary is FirmwareType.UPDATE:
                 mm[:HEADER_LENGTH] = bytes(header)
 
             mm[offset:offset + HEADER_LENGTH] = bytes(header)
