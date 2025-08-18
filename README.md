@@ -299,6 +299,9 @@ options:
 
 ![Unique ID](https://github.com/user-attachments/assets/7fffc7ec-c8cb-433a-a0f1-45f65d04ba8e)
 
+1. Click `Programmer > Chip Info` or press `<Ctrl+P>`
+2. Click `Read`
+
 #### Windows
 
 [AsProgrammer](https://github.com/nofeletru/UsbAsp-flash)
@@ -366,7 +369,7 @@ encuid2 E6632C25A344B330
 
 #### Linux
 
-##### IMSProg v1.5.1+
+##### [IMSProg](https://github.com/bigbigmdm/IMSProg) v1.5.1+
 
 > [!IMPORTANT]
 > If compiling from source, remember to udpate `/usr/share/imsprog/IMSProg.Dat`
@@ -376,7 +379,7 @@ encuid2 E6632C25A344B330
 1. Click`Detect`
 2. Click `Programmer > Security Registers` or press `<Ctrl+U>`
 
-##### flashrom
+##### [flashrom](https://www.flashrom.org/)
 
 flashrom requires an [abandoned patchset](https://review.coreboot.org/q/otp) and most likely requires changes
 to `flashchips.c` to add the `.otp` field for supported chips.
@@ -393,7 +396,7 @@ make
 
 #### Windows
 
-[AsProgrammer](https://github.com/nofeletru/UsbAsp-flash)
+##### [AsProgrammer](https://github.com/nofeletru/UsbAsp-flash)
 
 Scripts are required and need to be modified for each vendor/flash. e.g.
 
