@@ -369,6 +369,18 @@ encuid2 E6632C25A344B330
 
 #### Linux
 
+##### IMSProg v1.5.1+
+
+> [!IMPORTANT]
+> If compiling from source, remember to udpate `/usr/share/imsprog/IMSProg.Dat`
+
+![Security Registers](https://github.com/user-attachments/assets/18decb41-ad33-4592-b301-5fa87ea55981)
+
+1. Click`Detect`
+2. Click `Programmer > Security Registers` or press `<Ctrl+U>`
+
+##### flashrom
+
 flashrom requires an [abandoned patchset](https://review.coreboot.org/q/otp) and most likely requires changes
 to `flashchips.c` to add the `.otp` field for supported chips.
 
