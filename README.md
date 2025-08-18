@@ -294,7 +294,7 @@ options:
 
 ### Dump Unique ID ie. command 42h
 
-#### Linux
+#### Linux / macOS
 
 [IMSProg](https://github.com/bigbigmdm/IMSProg)
 
@@ -308,6 +308,8 @@ options:
 [AsProgrammer](https://github.com/nofeletru/UsbAsp-flash)
 
 ![Unique ID](https://github.com/user-attachments/assets/74aa02ff-ce02-4172-9834-d4d7a9ca14da)
+
+Scripts are require e.g. [FM25Q16A_SS.pas](/tools/FM25Q16A_SS.pas) `readUID`
 
 ### Hardware versions prior to v2.0.1
 
@@ -368,7 +370,7 @@ encuid2 E6632C25A344B330
 
 ### Write Security Register
 
-#### Linux
+#### Linux / macOS
 
 ##### [IMSProg](https://github.com/bigbigmdm/IMSProg) v1.5.1+
 
@@ -401,4 +403,4 @@ make
 
 Scripts are required and need to be modified for each vendor/flash. e.g.
 
-The [FM25Q16A_SS.pas](/tools/FM25Q16A_SS.pas) script is a modification of https://github.com/nofeletru/UsbAsp-flash/blob/master/scripts/GPR25L3203F_OTP.pas for the FM25Q16A https://www.fmsh.com/nvm/FM25Q16A_ds_eng.pdf
+The [FM25Q16A_SS.pas](/tools/FM25Q16A_SS.pas) script is a modification of https://github.com/nofeletru/UsbAsp-flash/blob/master/scripts/GPR25L3203F_OTP.pas for the FM25Q16A https://www.fmsh.com/nvm/FM25Q16A_ds_eng.pdf which contains both `readSS` and `writeSS`
