@@ -364,9 +364,6 @@ encuid2 E6632C25A344B330
 
 ### Write Security Register
 
-> [!WARNING]
-> This section is incomplete due the lack of software support.
-
 #### Linux
 
 ##### IMSProg v1.5.1+
