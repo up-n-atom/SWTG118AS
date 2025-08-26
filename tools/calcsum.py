@@ -51,10 +51,7 @@ class Header:
 
         if all(hasattr(self, attr) for attr in self.__slots__) and \
            name in ('length', 'payload_sum'):
-            object.__setattr__(self, 'header_sum', Header.calc_sum(self))
-
-    def __bool__(self) -> bool:
-        return Header.is_valid(self)
+            object.__setattr__(self, 'header_sum', self.calc_sum())
 
     def __bytes__(self) -> bytes:
         return self.to_bytes()
@@ -65,17 +62,19 @@ class Header:
     def to_bytes(self) -> bytes:
         return pack('>5I', *astuple(self))
 
-    @staticmethod
-    def calc_sum(header: Header) -> int:
-        buffer = bytearray(bytes(header))
+    def calc_sum(self) -> int:
+        buffer = bytearray(bytes(self))
+
+        if len(buffer) != HEADER_LENGTH:
+            raise ValueError('Invalid header length')
+
         buffer[8:12] = bytearray(4)
+ 
         return sum(buffer)
 
-    @staticmethod
-    def is_valid(header: Header, ignore_sum: bool = True) -> bool:
-        return header.magic == HEADER_MAGIC and \
-               header.reserved == HEADER_RESERVED and \
-               (ignore_sum or header.header_sum == Header.calc_sum(header))
+    @property
+    def dirty(self) -> bool:
+        return self.header_sum != self.calc_sum()
 
     @classmethod
     def from_bytes(cls, buffer: bytes) -> Header:
@@ -105,9 +104,12 @@ def main() -> None:
             case 0x3412:
                 buffer += mm.read(HEADER_LENGTH - 2)
 
-                header = Header.from_bytes(buffer)
+                try:
+                    header = Header.from_bytes(buffer)
+                except Exception as e:
+                    exit(e)
 
-                binary = FirmwareType.UPDATE if header and (header.length + HEADER_LENGTH) == mm.size() else FirmwareType.UNKNOWN
+                binary = FirmwareType.UPDATE if (header.length + HEADER_LENGTH) == mm.size() else FirmwareType.UNKNOWN
 
         if binary is FirmwareType.UNKNOWN:
             exit('Invalid binary')
@@ -128,10 +130,10 @@ def main() -> None:
 
         mm.seek(offset, os.SEEK_SET)
 
-        header = Header.from_bytes(mm.read(HEADER_LENGTH))
-
-        if not header:
-            exit('Invalid binary')
+        try:
+            header = Header.from_bytes(mm.read(HEADER_LENGTH))
+        except Exception as e:
+            exit(e)
 
         payload_sum += 0xff * HEADER_LENGTH
 
@@ -139,8 +141,8 @@ def main() -> None:
 
         if header.payload_sum != payload_sum:
             print_or_exit('Incorrect payload sum')
-        else:
-            print(header)
+
+        print(header)
 
         if args.update:
             print('Updating checksums...')
