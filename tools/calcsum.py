@@ -63,10 +63,7 @@ class Header:
         return pack('>5I', *astuple(self))
 
     def calc_sum(self) -> int:
-        buffer = bytearray(bytes(self))
-
-        if len(buffer) != HEADER_LENGTH:
-            raise ValueError('Invalid header length')
+        buffer = bytearray(self.to_bytes())
 
         buffer[8:12] = bytearray(4)
  
