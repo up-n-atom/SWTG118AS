@@ -118,11 +118,11 @@ sal_port_config_restore()...OK
 
 ### *uboot* Password
 
-| Switch Model                                  | *"uboot"* Password |
-| --------------------------------------------- | ------------------ |
-| **SWTG118AS** / **SWTG115AS** / **SWTG124AS** | `Switch321`        |
-| **SWTGW215AS**                                | `Hs2021cfgmg`      |
-| **SWTG024AS-A-V2.0.1**                        | `Lx+2035&asp`      |
+| Switch Model                                  | Firmware Version | *"uboot"* Password |
+| --------------------------------------------- | ---------------- | ------------------ |
+| **SWTG118AS** / **SWTG115AS** / **SWTG124AS** | v1.9.x           | `Switch321`        |
+| **SWTGW215AS**                                | v100.x           | `Hs2021cfgmg`      |
+| **SWTGW218AS** / **SWTG024AS**                | v200.x           | `Lx+2035&asp`      |
 
 ```bash
 Login OK.
@@ -201,10 +201,10 @@ There 2 protected region(s).
 
 | Firmware Offset | Length       | Description              | Notes                                                       |
 | --------------- | ------------ | ------------------------ | ----------------------------------------------------------- |
-| `0x00003E8A`    | `0x0000000B` | uboot Password           | HW v2.0.1+ & SW v200.1.11 xored by `0x5a`                   |
-| `0x00030F38`    | `0x0000000A` | uboot Password           | prior to HW v2.0.1 up to SW v1.9.1 (last release)           |
-| `0x000DD55F`    | `0x00000010` | AES Key                  | For lower case flash unique ID                              |
-| `0x000DD57F`    | `0x00000010` | AES Key                  | For upper case flash unique ID                              |
+| `0x00003E8A`    | `0x0000000B` | uboot Password           | FW v200.x xored by `0x5a`                                   |
+| `0x00030F38`    | `0x0000000A` | uboot Password           | FW v1.9.x                                                   |
+| `0x000DD55F`    | `0x00000010` | AES Key                  | For lower case flash unique ID (FW v1.9.1)                  |
+| `0x000DD57F`    | `0x00000010` | AES Key                  | For upper case flash unique ID (FW v1.9.1)                  |
 | `0x001FC000`    | `0x00000006` | MAC address              |                                                             |
 | `0x001FC026`    | `0x00000002` | Web/Dumb mode            | `0x00` = Dumb Mode, `0x01` = Web Mode, `0xFF` = Auto detect |
 | `0x001FD000`    | `0x0000023D` | Factory settings         |                                                             |
@@ -311,7 +311,7 @@ options:
 
 Scripts are require e.g. [FM25Q16A_SS.pas](/tools/FM25Q16A_SS.pas) `readUID`
 
-### Hardware versions prior to v2.0.1
+### Firmware versions prior and up to 1.9.x
 
 #### Generate 16-byte Data
 
@@ -340,7 +340,7 @@ python3 -m pip install pycrypto
 python3 encuid.py
 ```
 
-### Hardware version 2.0.1
+### Firmwave version 200.x
 
 The AES-ECB algo was modified, along with an obfuscated key and altered plaintext based from the UID. A new C tool, [encuid2](/tools/encuid2), implements the algo.
 
