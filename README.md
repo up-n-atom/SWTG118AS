@@ -118,11 +118,16 @@ sal_port_config_restore()...OK
 
 ### *uboot* Password
 
+> [!NOTE]
+> FW v100.x and v200.x the password is obfuscated with an XOR cipher.
+> `\x16\x22\x71\x68\x6A\x69\x6F\x7C\x3B\x29\x2A` is XORed by `0x5a`.
+
+
 | Switch Model                                  | Firmware Version | *"uboot"* Password |
 | --------------------------------------------- | ---------------- | ------------------ |
 | **SWTG118AS** / **SWTG115AS** / **SWTG124AS** | v1.9.x           | `Switch321`        |
-| **SWTGW215AS**                                | v100.x           | `Hs2021cfgmg`      |
-| **SWTGW218AS** / **SWTG024AS**                | v200.x           | `Lx+2035&asp`      |
+| **SWTGW215AS**                                | HASIVO ???       | `Hs2021cfgmg`      |
+| **SWTGW218AS** / **SWTG024AS**                | v100.x /v200.x   | `Lx+2035&asp`      |
 
 ```bash
 Login OK.
@@ -201,7 +206,6 @@ There 2 protected region(s).
 
 | Firmware Offset | Length       | Description              | Notes                                                       |
 | --------------- | ------------ | ------------------------ | ----------------------------------------------------------- |
-| `0x00003E8A`    | `0x0000000B` | uboot Password           | FW v200.x xored by `0x5a`                                   |
 | `0x00030F38`    | `0x0000000A` | uboot Password           | FW v1.9.x                                                   |
 | `0x000DD55F`    | `0x00000010` | AES Key                  | For lower case flash unique ID (FW v1.9.1)                  |
 | `0x000DD57F`    | `0x00000010` | AES Key                  | For upper case flash unique ID (FW v1.9.1)                  |
@@ -340,7 +344,7 @@ python3 -m pip install pycrypto
 python3 encuid.py
 ```
 
-### Firmwave version 200.x
+### Firmwave version 100.x and 200.x
 
 The AES-ECB algo was modified, along with an obfuscated key and altered plaintext based from the UID. A new C tool, [encuid2](/tools/encuid2), implements the algo.
 
