@@ -375,7 +375,7 @@ encuid2 E6632C25A344B330
 ##### [IMSProg](https://github.com/bigbigmdm/IMSProg) v1.5.1+
 
 > [!IMPORTANT]
-> If compiling from source, remember to udpate `/usr/share/imsprog/IMSProg.Dat`
+> If compiling from source, remember to update `/usr/share/imsprog/IMSProg.Dat`
 
 ![Security Registers](https://github.com/user-attachments/assets/18decb41-ad33-4592-b301-5fa87ea55981)
 
