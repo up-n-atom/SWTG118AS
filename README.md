@@ -207,8 +207,8 @@ There 2 protected region(s).
 | Firmware Offset | Length       | Description              | Notes                                                       |
 | --------------- | ------------ | ------------------------ | ----------------------------------------------------------- |
 | `0x00030F38`    | `0x0000000A` | uboot Password           | FW v1.9.x                                                   |
-| `0x000DD55F`    | `0x00000010` | AES Key                  | For lower case flash unique ID (FW v1.9.1)                  |
-| `0x000DD57F`    | `0x00000010` | AES Key                  | For upper case flash unique ID (FW v1.9.1)                  |
+| `0x000DD55F`    | `0x00000010` | AES Key                  | For lower case flash unique ID (FW v1.9.x)                  |
+| `0x000DD57F`    | `0x00000010` | AES Key                  | For upper case flash unique ID (FW v1.9.x)                  |
 | `0x001FC000`    | `0x00000006` | MAC address              |                                                             |
 | `0x001FC026`    | `0x00000002` | Web/Dumb mode            | `0x00` = Dumb Mode, `0x01` = Web Mode, `0xFF` = Auto detect |
 | `0x001FD000`    | `0x0000023D` | Factory settings         |                                                             |
