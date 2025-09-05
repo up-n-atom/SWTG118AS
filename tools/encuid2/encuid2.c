@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
     }
 
     /* take the 40 msb of the uid and shift right by 2 ie. >> 24 + 2
-       
+
        eg.
 
        e6632c25a344b330 >> 18 (24 dec)
