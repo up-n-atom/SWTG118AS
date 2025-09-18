@@ -92,7 +92,11 @@ int main(int argc, char *argv[]) {
 
     for (size_t i = 0; i < (sizeof(buf) >> 4); i++) {
         /* swtg adds a coefficient prior to MixColumns and after the last
-           round in the Cipher function. note: swtg firmware uses a flag */
+           round in the Cipher function. swtg_nonsense.patch does just
+           that to the linked tiny-aes-c library.
+
+           note: swtg firmware uses a context flag for continued support
+           of the original algorithm. */
         AES_ECB_encrypt(&ctx, (uint8_t *)&buf[i << 4]);
     }
 
