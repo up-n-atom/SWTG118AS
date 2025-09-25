@@ -5,107 +5,151 @@
 #include <ctype.h>
 #include <errno.h>
 #include <limits.h>
+#include <endian.h>
+#include <unistd.h>
+#include <inttypes.h>
+#include <assert.h>
 
 #include "aes.h"
 
-#define BUF_SIZE 32 + 1 /* includes null terminator */
+typedef struct {
+    const char *aeskey;
+    size_t ptlen;
+    int shr;
+    bool obf;
+} algo_ctx_t;
 
-/* the key is obfuscated and generated based on fixed input but for simplicity
-   sake statically defined here */
-#define KEY_STRING "S@gi0PneW^#*T1Zb"
+static const algo_ctx_t ALGOS[] = {
+    {"59494F4754fff00\0", AES_BLOCKLEN,     32, false},
+    { "S@gi0PneW^#*T1Zb", AES_BLOCKLEN * 2, 26,  true},
+    { "$Fl0R0kmKh1*Jkme", AES_BLOCKLEN * 2,  0,  true}
+};
 
-int main(int argc, char *argv[]) {
-    if (argc != 2) {
-        fprintf(stderr, "Usage: %s <uid>\n", argv[0]);
-        return EXIT_FAILURE;
-    }
+void show_usage(const char *prog) {
+    fprintf(stderr, "Usage: %s [-a] <uid>\n", prog);
+    fputs("Options:\n", stderr);
+    fputs("\t-a\talgorithm 0|1|2 (default: 1)\n", stderr);
+    fputs("\t-v\tenable verbose mode\n", stderr);
+    fputs("\t<uid> 16-char hex value\n", stderr);
+}
 
-    const char *uid = argv[1];
-
+static uint64_t parse_uid(const char *uid) {
+    uint64_t val = 0;
     size_t len = strlen(uid);
 
-    if (len != 16) {
+    if (len != AES_KEYLEN) {
         fputs("Error: invalid uid length\n", stderr);
-        return EXIT_FAILURE;
+        goto end;
     }
 
     for (size_t i = 0; i < len; i++) {
         if (!isxdigit(uid[i])) {
             fputs("Error: uid contains non-hex char\n", stderr);
-            return EXIT_FAILURE;
+            goto end;
         }
     }
 
-    uint64_t val = strtoull(uid, NULL, 16);
+    char *endptr = NULL;
+    val = strtoull(uid, &endptr, 16);
 
-    /* regard ffffffffffffffff and 0000000000000000 entries as invalid
-       if errno is ERANGE, ULLONG_MAX is returned 2 birds 1 stone */
-    if (val == ULLONG_MAX || val == 0) {
-        fputs("Error: uid is nil or too large\n", stderr);
+    if (endptr != uid + len || errno == ERANGE) {
+        fputs("Error: uid conversion failed or out of range\n", stderr);
+        goto end;
+    }
+
+end:
+    return val;
+}
+
+static uint8_t *gen_plaintext(const algo_ctx_t *ctx, const uint64_t uid) {
+    uint8_t *buf = calloc(1, ctx->ptlen);
+
+    assert(buf != NULL);
+
+    size_t n = 0;
+
+    if (ctx->shr) {
+        n = snprintf(buf, 9, "%08" PRIx32, (uint32_t)(uid >> ctx->shr));
+    } else {
+        n = snprintf(buf, 17, "%016" PRIx64, uid);
+    }
+
+    while (n < ctx->ptlen) {
+        size_t chunk = (ctx->ptlen - n) < n ? ctx->ptlen - n : n;
+        memcpy(buf + n, buf, chunk);
+        n += chunk;
+    }
+
+    if (ctx->obf) {
+        buf[0]  = '@'; buf[3]  = '#'; buf[7]  = 'x';
+        buf[9]  = 'N'; buf[11] = '?'; buf[15] = 'a';
+        buf[17] = '*'; buf[20] = ')'; buf[24] = 't';
+        buf[26] = 'C'; buf[29] = '?'; buf[30] = 'P';
+    }
+
+    return buf;
+}
+
+int main(int argc, char *argv[]) {
+    const algo_ctx_t *algo = &ALGOS[1];
+    bool verbose = false;
+    int opt;
+
+    while ((opt = getopt(argc, argv, "a:vh")) != -1) {
+        switch (opt) {
+            case 'a':
+                int val = atoi(optarg);
+                if (val < 0 || val > 2) {
+                    fputs("Error: algorithm must be 0, 1, or 2\n", stderr);
+                    return EXIT_FAILURE;
+                }
+                algo = &ALGOS[val];
+                break;
+            case 'v':
+                verbose = true;
+                break;
+            case 'h':
+            case '?':
+                show_usage(argv[0]);
+                return EXIT_FAILURE;
+        }
+    }
+
+    if (optind >= argc) {
+        show_usage(argv[0]);
         return EXIT_FAILURE;
     }
 
-    /* take the 40 msb of the uid and shift right by 2 ie. >> 24 + 2
+    const uint64_t uid = parse_uid(argv[optind]);
 
-       eg.
-
-       e6632c25a344b330 >> 18 (24 dec)
-       e6632c25a3 >> 2
-       3998cb0968 & ffffffff (taken care by the cast to uint32_t)
-       98cb0968 */
-    val >>= 26;
-
-    char buf[BUF_SIZE] = {0};
-
-    snprintf(buf, 9, "%08x", (uint32_t)val); /* lowercase */
-
-    /* create a 32-char repeated string from the sliced and shifted uid
-       hexadecimal representation
-
-       eg.
-
-       98cb0968
-       98cb096898cb0968
-       98cb096898cb096898cb096898cb0968 */
-    for (int i = 1; i < 3; i++) {
-        strncat(buf, buf, i << 3);
+    if (uid == ULLONG_MAX || uid == 0) {
+        return EXIT_FAILURE;
     }
 
-    buf[0]  = '@';
-    buf[3]  = '#';
-    buf[7]  = 'x';
-    buf[9]  = 'N';
-    buf[11] = '?';
-    buf[15] = 'a';
-    buf[17] = '*';
-    buf[20] = ')';
-    buf[24] = 't';
-    buf[26] = 'C';
-    buf[29] = '?';
-    buf[30] = 'P';
+    uint8_t *buf = gen_plaintext(algo, uid);
 
-    const char key[] = KEY_STRING;
-
-    struct AES_ctx ctx = {0};
-
-    AES_init_ctx(&ctx, (const uint8_t *)key);
-
-    for (size_t i = 0; i < (sizeof(buf) >> 4); i++) {
-        /* swtg adds a coefficient prior to MixColumns and after the last
-           round in the Cipher function. swtg_nonsense.patch does just
-           that to the linked tiny-aes-c library.
-
-           note: swtg firmware uses a context flag for continued support
-           of the original algorithm. */
-        AES_ECB_encrypt(&ctx, (uint8_t *)&buf[i << 4]);
+    if (verbose) {
+        printf("Key: %.*s\n", AES_KEYLEN, algo->aeskey);
+        printf("Plain-text: %.*s\n", algo->ptlen, buf);
     }
 
-    for (size_t i = 0; i < (sizeof(buf) & ~0xf); i++) {
-        /* output whitening */
-        printf("%02hhx", (uint8_t)buf[i] ^ (uint8_t)(i % 16));
+    struct AES_ctx aes = {0};
+
+    AES_init_ctx(&aes, algo->aeskey, !algo->obf);
+
+    for (size_t n = 0; n < algo->ptlen; n += AES_BLOCKLEN) {
+        AES_ECB_encrypt(&aes, buf + n);
     }
 
-    puts("");
+    size_t outlen = !algo->obf ? algo->ptlen >> 1 : algo->ptlen;
+
+    for (size_t n = 0; n < outlen; n++) {
+        printf("%02hhx", !algo->obf ? buf[n] : buf[n] ^ (n % 16));
+    }
+
+    putchar('\n');
+
+    free(buf);
 
     return EXIT_SUCCESS;
 }

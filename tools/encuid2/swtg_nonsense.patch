@@ -1,13 +1,29 @@
 diff --git a/aes.c b/aes.c
-index 4481f7b..1913a96 100644
+index 4481f7b..beaec87 100644
 --- a/aes.c
 +++ b/aes.c
-@@ -296,6 +296,22 @@ static uint8_t xtime(uint8_t x)
+@@ -216,9 +216,16 @@ static void KeyExpansion(uint8_t* RoundKey, const uint8_t* Key)
+   }
+ }
+ 
++#if defined(SWTG) && (SWTG == 1)
++void AES_init_ctx(struct AES_ctx* ctx, const uint8_t* key, bool nist)
++#else
+ void AES_init_ctx(struct AES_ctx* ctx, const uint8_t* key)
++#endif
+ {
+   KeyExpansion(ctx->RoundKey, key);
++#if defined(SWTG) && (SWTG == 1)
++  ctx->NIST = nist;
++#endif
+ }
+ #if (defined(CBC) && (CBC == 1)) || (defined(CTR) && (CTR == 1))
+ void AES_init_ctx_iv(struct AES_ctx* ctx, const uint8_t* key, const uint8_t* iv)
+@@ -296,6 +303,20 @@ static uint8_t xtime(uint8_t x)
    return ((x<<1) ^ (((x>>7) & 1) * 0x1b));
  }
  
 +#if defined(SWTG) && (SWTG == 1)
-+
 +static void Manipulate(state_t* state, uint8_t multiplier)
 +{
 +  uint8_t i, j;
@@ -19,35 +35,91 @@ index 4481f7b..1913a96 100644
 +    }
 +  }
 +}
-+
 +#endif
 +
  // MixColumns function mixes the columns of the state matrix
  static void MixColumns(state_t* state)
  {
-@@ -428,11 +444,24 @@ static void Cipher(state_t* state, const uint8_t* RoundKey)
+@@ -410,7 +431,11 @@ static void InvShiftRows(state_t* state)
+ #endif // #if (defined(CBC) && CBC == 1) || (defined(ECB) && ECB == 1)
+ 
+ // Cipher is the main function that encrypts the PlainText.
++#if defined(SWTG) && (SWTG == 1)
++static void Cipher(state_t* state, const uint8_t* RoundKey, const bool nist)
++#else
+ static void Cipher(state_t* state, const uint8_t* RoundKey)
++#endif
+ {
+   uint8_t round = 0;
+ 
+@@ -428,11 +453,21 @@ static void Cipher(state_t* state, const uint8_t* RoundKey)
      if (round == Nr) {
        break;
      }
-+
 +#if defined(SWTG) && (SWTG == 1)
-+
-+  Manipulate(state, 0x41);
-+
++    if (!nist) {
++      Manipulate(state, 0x41);
++    }
 +#endif
-+
      MixColumns(state);
      AddRoundKey(round, state, RoundKey);
    }
    // Add round key to last round
    AddRoundKey(Nr, state, RoundKey);
-+
 +#if defined(SWTG) && (SWTG == 1)
-+
-+  Manipulate(state, 0x29);
-+
++  if (!nist) {
++    Manipulate(state, 0x29);
++  }
 +#endif
  }
  
  #if (defined(CBC) && CBC == 1) || (defined(ECB) && ECB == 1)
-
+@@ -470,7 +505,11 @@ static void InvCipher(state_t* state, const uint8_t* RoundKey)
+ void AES_ECB_encrypt(const struct AES_ctx* ctx, uint8_t* buf)
+ {
+   // The next function call encrypts the PlainText with the Key using AES algorithm.
++#if defined(SWTG) && (SWTG == 1)
++  Cipher((state_t*)buf, ctx->RoundKey, ctx->NIST);
++#else
+   Cipher((state_t*)buf, ctx->RoundKey);
++#endif
+ }
+ 
+ void AES_ECB_decrypt(const struct AES_ctx* ctx, uint8_t* buf)
+diff --git a/aes.h b/aes.h
+index b29b668..5d549aa 100644
+--- a/aes.h
++++ b/aes.h
+@@ -23,6 +23,15 @@
+   #define CTR 1
+ #endif
+ 
++#ifndef SWTG
++  #define SWTG 1
++#endif
++
++#if defined(SWTG) && (SWTG == 1)
++  #define ECB 1
++  #undef CBC
++  #undef CTR
++#endif
+ 
+ #define AES128 1
+ //#define AES192 1
+@@ -47,9 +56,16 @@ struct AES_ctx
+ #if (defined(CBC) && (CBC == 1)) || (defined(CTR) && (CTR == 1))
+   uint8_t Iv[AES_BLOCKLEN];
+ #endif
++#if defined(SWTG) && (SWTG == 1)
++  bool NIST;
++#endif
+ };
+ 
++#if defined(SWTG) && (SWTG == 1)
++void AES_init_ctx(struct AES_ctx* ctx, const uint8_t* key, const bool nist);
++#else
+ void AES_init_ctx(struct AES_ctx* ctx, const uint8_t* key);
++#endif
+ #if (defined(CBC) && (CBC == 1)) || (defined(CTR) && (CTR == 1))
+ void AES_init_ctx_iv(struct AES_ctx* ctx, const uint8_t* key, const uint8_t* iv);
+ void AES_ctx_set_iv(struct AES_ctx* ctx, const uint8_t* iv);
