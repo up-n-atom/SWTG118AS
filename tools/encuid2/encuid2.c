@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <inttypes.h>
 #include <assert.h>
+#include <stdbool.h>
 
 #include "aes.h"
 
@@ -69,9 +70,9 @@ static uint8_t *gen_plaintext(const algo_ctx_t *ctx, const uint64_t uid) {
     size_t n = 0;
 
     if (ctx->shr) {
-        n = snprintf(buf, 9, "%08" PRIx32, (uint32_t)(uid >> ctx->shr));
+        n = snprintf((char *)buf, 9, "%08" PRIx32, (uint32_t)(uid >> ctx->shr));
     } else {
-        n = snprintf(buf, 17, "%016" PRIx64, uid);
+        n = snprintf((char *)buf, 17, "%016" PRIx64, uid);
     }
 
     while (n < ctx->ptlen) {
@@ -130,12 +131,12 @@ int main(int argc, char *argv[]) {
 
     if (verbose) {
         printf("Key: %.*s\n", AES_KEYLEN, algo->aeskey);
-        printf("Plain-text: %.*s\n", algo->ptlen, buf);
+        printf("Plain-text: %.*s\n", (int)algo->ptlen, buf);
     }
 
     struct AES_ctx aes = {0};
 
-    AES_init_ctx(&aes, algo->aeskey, !algo->obf);
+    AES_init_ctx(&aes, (uint8_t *)algo->aeskey, !algo->obf);
 
     for (size_t n = 0; n < algo->ptlen; n += AES_BLOCKLEN) {
         AES_ECB_encrypt(&aes, buf + n);
@@ -144,7 +145,7 @@ int main(int argc, char *argv[]) {
     size_t outlen = !algo->obf ? algo->ptlen >> 1 : algo->ptlen;
 
     for (size_t n = 0; n < outlen; n++) {
-        printf("%02hhx", !algo->obf ? buf[n] : buf[n] ^ (n % 16));
+        printf("%02hhx", !algo->obf ? buf[n] : buf[n] ^ (uint8_t)(n % 16));
     }
 
     putchar('\n');

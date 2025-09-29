@@ -87,9 +87,17 @@ index 4481f7b..beaec87 100644
  
  void AES_ECB_decrypt(const struct AES_ctx* ctx, uint8_t* buf)
 diff --git a/aes.h b/aes.h
-index b29b668..5d549aa 100644
+index b29b668..98848c4 100644
 --- a/aes.h
 +++ b/aes.h
+@@ -3,6 +3,7 @@
+ 
+ #include <stdint.h>
+ #include <stddef.h>
++#include <stddef.h>
+ 
+ // #define the macros below to 1/0 to enable/disable the mode of operation.
+ //
 @@ -23,6 +23,15 @@
    #define CTR 1
  #endif
